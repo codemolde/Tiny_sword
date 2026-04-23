@@ -8,9 +8,10 @@
 Game::Game() : window(sf::VideoMode({width,height}), "River Valley"){
 
     //creates a dynamyic player with three animated textures as parameters
-    player=new Player(wTexRun,wTexIdle,wTexAttack);
 
     map=new Map(mapTexture,watermap,waterFormmap);
+
+    player=new Player(wTexRun,wTexIdle,wTexAttack,*map);
 
     tr=new Tree(tree);
 }

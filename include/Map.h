@@ -39,6 +39,8 @@ public:
     void draw(sf::RenderWindow &window);
 
     void updatemap(float dt);
+
+    sf::Vector2f getGridPos(sf::Vector2f &pos,sf::Vector2f &movement);
 };
 
 #endif //MAP_H

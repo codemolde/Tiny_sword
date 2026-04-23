@@ -4,40 +4,48 @@
 #include "Player.h"
 
 // so many initailizer woohh... ,?? why? needed that.
-Player::Player(sf::Texture &texRun,sf::Texture& texIdle,sf::Texture& texAttack) : Entity(texRun),texRun(texRun),texIdle(texIdle),texAttack(texAttack), animator(192, 192, 6, 0.09f),animatorIdle(192, 192, 6, 0.09f),animatorAttack(192, 192, 4, 0.09f) {
+Player::Player(sf::Texture &texRun,sf::Texture& texIdle,sf::Texture& texAttack,Map& gamemap) : Entity(texRun),texRun(texRun),texIdle(texIdle),texAttack(texAttack), animator(192, 192, 6, 0.09f),animatorIdle(192, 192, 6, 0.09f),animatorAttack(192, 192, 4, 0.09f),map(gamemap) {
     wsprite.setTextureRect(animator.getFrameRect());
-    wsprite.setPosition(sf::Vector2f(100, 100));
+    wsprite.setPosition(sf::Vector2f(200, 200));
     wsprite.setScale(sf::Vector2f(1, 1));
     wsprite.setOrigin({96, 96});
 }
 
 void Player::update(float dt) {
-    mvelocity = sf::Vector2f(0.f, 0.f);
+    mvelocity = {0,0};
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) mvelocity.y -= 1.f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) mvelocity.y += 1.f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) mvelocity.x -= 1.f;
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) mvelocity.x += 1.f;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
+        mvelocity.y -= 1.f;
+        wsprite.setScale({1, 1});
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S)) {
+        mvelocity.y += 1.f;
+        wsprite.setScale({-1, 1});
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+        mvelocity.x -= 1.f;
+        wsprite.setScale({-1, 1});
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+        mvelocity.x += 1.f;
+        wsprite.setScale({1, 1});
+}
 
     //velocity normilizer
     if (mvelocity.x != 0 || mvelocity.y != 0) {
         float length = std::sqrt(mvelocity.x * mvelocity.x + mvelocity.y * mvelocity.y);
         mvelocity.x /= length;
         mvelocity.y /= length;
-    }
 
-    float speed = 300.f;
-    mvelocity.x *= speed;
-    mvelocity.y *= speed;
+        float speed = 300.f;
+        mvelocity.x *= speed*dt;
+        mvelocity.y *= speed*dt;
 
-    wsprite.move(mvelocity * dt);
+        sf::Vector2f pos = wsprite.getPosition();
 
+        sf::Vector2f rpos = map.getGridPos(pos,mvelocity);
 
-    //rotates sprites according to the moving direction
-    if (mvelocity.x > 0) {
-        wsprite.setScale({1, 1});
-    } else if (mvelocity.x < 0) {
-        wsprite.setScale({-1, 1});
+        wsprite.setPosition(rpos);
     }
 
 

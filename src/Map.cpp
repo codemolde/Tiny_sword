@@ -142,3 +142,31 @@ void Map::draw(sf::RenderWindow &window) {
 void Map::updatemap(float dt) {
     animatorwaterform.update(dt, 0);
 }
+
+sf::Vector2f Map::getGridPos(sf::Vector2f &pos,sf::Vector2f &movement) {
+
+    float Tile=64.f;
+    sf::Vector2f nextgridPos = pos + sf::Vector2f(movement.x, 0.f);
+
+    int gridX = static_cast<int>(nextgridPos.x / Tile);
+    int gridY = static_cast<int>(nextgridPos.y / Tile);
+
+    if (gridY >= 0 && gridY < 30 && gridX >= 0 && gridX < 14) {
+        if (map[gridY][gridX] == 0) {
+            pos.x = nextgridPos.x;
+        }
+    }
+
+    sf::Vector2f nextPosY = pos + sf::Vector2f(0.f, movement.y);
+
+    gridX = static_cast<int>(pos.x / Tile);
+    gridY = static_cast<int>(nextgridPos.y / Tile);
+
+    if (gridY >= 0 && gridY < 30 && gridX >= 0 && gridX < 14) {
+        if (map[gridY][gridX] == 0) {
+            pos.y = nextPosY.y;
+        }
+    }
+
+    return {pos.x, pos.y};
+}
