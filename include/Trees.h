@@ -11,6 +11,9 @@ class Tree: public Entity {
     Tree(sf::Texture& texture);
 
     void update(float dt)override;
+    float getDepth()const override {
+        return wsprite.getPosition().y;
+    }
 };
 
 

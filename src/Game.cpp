@@ -13,12 +13,15 @@ Game::Game() : window(sf::VideoMode({width,height}), "River Valley"){
 
     player=new Player(wTexRun,wTexIdle,wTexAttack,*map);
 
+    enemy=new Enemy(wTexRunen,wTexIdleen,wTexAttacken,*map);
+
     tr=new Tree(tree);
 }
 
 Game::~Game() {
     //deletes the player in this disconstructor
     delete player;
+    delete enemy;
     delete map;
     delete tr;
 }
@@ -58,6 +61,7 @@ void Game::render() {
     renderQueue.clear();
 
     renderQueue.push_back(player);
+    renderQueue.push_back(enemy);
     renderQueue.push_back(tr);
 
     std::stable_sort(renderQueue.begin(),renderQueue.end(),[](const Entity* a,const Entity* b) {
@@ -68,11 +72,14 @@ void Game::render() {
         e->draw(window);
     }
 
+
     window.display();
 }
 
 void Game::update(float dt) {
         player->update(dt);
+        enemy->getPlayerpos(player->wsprite.getPosition());
+        enemy->update(dt);
         map->updatemap(dt);
         tr->update(dt);
 }

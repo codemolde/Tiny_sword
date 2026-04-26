@@ -28,9 +28,7 @@ class Entity {
         window.draw(wsprite);
     }
 
-    float getDepth() const {
-        return wsprite.getPosition().y;
-    }
+    virtual float getDepth()const=0;
 };
 
 #endif //ENTITY_H

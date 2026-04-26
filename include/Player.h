@@ -29,6 +29,9 @@ public:
     //using Entity virtual fuction to update player evry frame
     //override ?? still question,ans-> protect from creating its own new function instead of the parent virtual function
     void update(float dt) override;
+    float getDepth()const override {
+        return wsprite.getPosition().y;
+    }
 };
 
 #endif //PLAYER_H

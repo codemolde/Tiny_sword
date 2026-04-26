@@ -78,6 +78,8 @@ void Map::draw(sf::RenderWindow &window) {
         }
     }
 
+    smap.setTexture(texture);
+
     for (int i = 0; i < 11; i++) {
         for (int j = 0; j < 15; j++) {
             float xPos = j * width;
@@ -88,46 +90,46 @@ void Map::draw(sf::RenderWindow &window) {
             sf::IntRect textureRect;
 
             switch (tileId) {
-                case 0: smap.setTexture(texture);
+                case 0:
                     textureRect = {{64, 64}, {64, 64}};
                     break;
-                case 1: smap.setTexture(texture);
+                case 1:
                     textureRect = {{64 * 6, 64 * 2}, {64, 64}};
                     break;
-                case 2: smap.setTexture(texture);
+                case 2:
                     textureRect = {{64 * 5, 64 * 2}, {64, 64}};
                     break;
-                case 3: smap.setTexture(texture);
+                case 3:
                     textureRect = {{64 * 5, 0}, {64, 64}};
                     break;
-                case 4: smap.setTexture(texture);
+                case 4:
                     textureRect = {{64 * 7, 0}, {64, 64}};
                     break;
-                case 5: smap.setTexture(texture);
+                case 5:
                     textureRect = {{64 * 7, 64 * 2}, {64, 64}};
                     break;
-                case 6: smap.setTexture(texture);
+                case 6:
                     textureRect = {{64 * 5, 64}, {64, 64}};
                     break;
-                case 7: smap.setTexture(texture);
+                case 7:
                     textureRect = {{64 * 7, 64}, {64, 64}};
                     break;
-                case 8: smap.setTexture(texture);
+                case 8:
                     textureRect = {{64 * 6, 0}, {64, 64}};
                     break;
-                case 9: smap.setTexture(texture);
+                case 9:
                     textureRect = {{64 * 5, 64 * 5}, {64, 64}};
                     break;
-                case 11: smap.setTexture(texture);
+                case 11:
                     textureRect = {{64 * 7, 64 * 5}, {64, 64}};
                     break;
-                case 12: smap.setTexture(texture);
+                case 12:
                     textureRect = {{64 * 6, 64 * 5}, {64, 64}};
                     break;
-                case 14: smap.setTexture(texture);
+                case 14:
                     textureRect = {{0, 64 * 4}, {64, 64*2}};
                     break;
-                case 10: smap.setTexture(texture);
+                case 10:
                     textureRect = {{64 * 5, 64 * 3}, {64, 64}};
                     break;
                 default: continue;
@@ -160,7 +162,7 @@ sf::Vector2f Map::getGridPos(sf::Vector2f &pos,sf::Vector2f &movement) {
     sf::Vector2f nextPosY = pos + sf::Vector2f(0.f, movement.y);
 
     gridX = static_cast<int>(pos.x / Tile);
-    gridY = static_cast<int>(nextgridPos.y / Tile);
+    gridY = static_cast<int>(nextPosY.y / Tile);
 
     if (gridY >= 0 && gridY < 30 && gridX >= 0 && gridX < 14) {
         if (map[gridY][gridX] == 0) {

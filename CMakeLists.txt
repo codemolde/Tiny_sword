@@ -23,7 +23,14 @@ add_executable(${PROJECT_NAME} src/main.cpp
         src/Map.cpp
         include/Trees.h
         src/Trees.cpp
+        include/Enemy.h
+        src/Enemy.cpp
 )
+
+set(ASSETS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/Tiny Swords (Free Pack)")
+
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory "${ASSETS_DIR}" "$<TARGET_FILE_DIR:${PROJECT_NAME}>/assets"  VERBATIM)
+
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
