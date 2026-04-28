@@ -18,6 +18,7 @@ class Player : public Entity {
     Map &map;
 public:
 
+    float healthpy=health;
     //three different animation for player
     Animator animator;
     Animator animatorIdle;

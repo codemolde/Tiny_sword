@@ -29,23 +29,30 @@ void Enemy::update(float dt) {
 
         sf::Vector2f rpos = map.getGridPos(pos,mvelocity);
 
+        if (mvelocity.x > 0) {
+            wsprite.setScale({1, 1});
+        } else if (mvelocity.x < 0) {
+            wsprite.setScale({-1, 1});
+        }
+
         wsprite.setPosition(rpos);
     }
 
 
     // checks if moving or not
     bool running = true;
-    if (distanceRadius<96) {
+    if (length>distanceRadius || length<=16) {
         running = false;
     } else {
         running = true;
     }
 
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) {
+    if (attack()) {
         wsprite.setTexture(texAttacken);
         aniEnemyAttack.update(dt, 0);
         wsprite.setTextureRect(aniEnemyAttack.getFrameRect());
+        healthen-=0.01;
     }
     else if (!running) {
         wsprite.setTexture(texIdleen);
@@ -57,4 +64,14 @@ void Enemy::update(float dt) {
         aniEnemy.update(dt, 0);
         wsprite.setTextureRect(aniEnemy.getFrameRect());
     }
+}
+
+bool Enemy::attack() {
+    mvelocity=plyposition-wsprite.getPosition();
+
+    float length = std::sqrt(mvelocity.x * mvelocity.x + mvelocity.y * mvelocity.y);
+    if (length<=32) {
+        return true;
+    }
+    return false;
 }

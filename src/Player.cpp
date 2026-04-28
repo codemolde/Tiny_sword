@@ -62,6 +62,7 @@ void Player::update(float dt) {
         wsprite.setTexture(texAttack);
         animatorAttack.update(dt, 0);
         wsprite.setTextureRect(animatorAttack.getFrameRect());
+        healthpy-=0.02;
     }
     else if (!running) {
         wsprite.setTexture(texIdle);

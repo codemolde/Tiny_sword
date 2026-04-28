@@ -12,6 +12,7 @@ class Entity {
        sf::Sprite wsprite;
        sf::Vector2f mpostion;
        sf::Vector2f mvelocity;
+       const float health=100;
 
     //Entity constructor takes one argument texture of running animation
     //why it is nessecary to pass initializer in constructors, ans->because sprite need to be initailized because of white square bug

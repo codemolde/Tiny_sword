@@ -15,7 +15,9 @@ private:
     sf::Texture& texAttacken;
     Map &map;
     sf::Vector2f plyposition;
+
 public:
+    float healthen=health;
     //three different animation for player
     Animator aniEnemy;
     Animator aniEnemyIdle;
@@ -33,6 +35,7 @@ public:
     void getPlayerpos(sf::Vector2f pos) {
         plyposition = pos;
     }
+    bool attack();
 };
 
 #endif //ENEMY_H

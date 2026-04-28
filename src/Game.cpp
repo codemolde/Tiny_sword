@@ -60,9 +60,9 @@ void Game::render() {
 
     renderQueue.clear();
 
-    renderQueue.push_back(player);
-    renderQueue.push_back(enemy);
-    renderQueue.push_back(tr);
+    if (player->healthpy>0) renderQueue.push_back(player);
+    if (enemy->healthen>0) renderQueue.push_back(enemy);
+   renderQueue.push_back(tr);
 
     std::stable_sort(renderQueue.begin(),renderQueue.end(),[](const Entity* a,const Entity* b) {
         return a->getDepth()<b->getDepth();
