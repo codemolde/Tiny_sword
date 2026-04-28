@@ -8,33 +8,42 @@
 #include <Map.h>
 
 class Enemy : public Entity {
-
 private:
     sf::Texture &texRunen;
     sf::Texture &texIdleen;
-    sf::Texture& texAttacken;
+    sf::Texture &texAttacken;
     Map &map;
     sf::Vector2f plyposition;
 
 public:
-    float healthen=health;
+    sf::RectangleShape healthBaren;
+
+    float healthen = health;
     //three different animation for player
     Animator aniEnemy;
     Animator aniEnemyIdle;
     Animator aniEnemyAttack;
+    sf::IntRect idleRecten;
 
     //player constructor takes three texture for three different animation in the Game.cpp
-    Enemy(sf::Texture &texRunen, sf::Texture &texIdleen,sf::Texture& texAttacken,Map& gamemap);
+    Enemy(sf::Texture &texRunen, sf::Texture &texIdleen, sf::Texture &texAttacken, Map &gamemap);
 
     //using Entity virtual fuction to update player evry frame
     //override ?? still question,ans-> protect from creating its own new function instead of the parent virtual function
     void update(float dt) override;
-    float getDepth()const override {
+
+    float getDepth() const override {
         return wsprite.getPosition().y;
     }
+
     void getPlayerpos(sf::Vector2f pos) {
         plyposition = pos;
     }
+
+    void healthbarDraw(sf::RenderWindow &window) {
+        window.draw(healthBaren);
+    }
+
     bool attack();
 };
 

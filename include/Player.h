@@ -11,27 +11,35 @@ class Map;
 
 // inherits from entity class
 class Player : public Entity {
-    private:
+private:
     sf::Texture &texRun;
     sf::Texture &texIdle;
-    sf::Texture& texAttack;
+    sf::Texture &texAttack;
     Map &map;
-public:
 
-    float healthpy=health;
+public:
+    sf::RectangleShape healthBar;
+
+    float healthpy = health;
     //three different animation for player
     Animator animator;
     Animator animatorIdle;
     Animator animatorAttack;
+    sf::IntRect idleRectpy;
 
     //player constructor takes three texture for three different animation in the Game.cpp
-    Player(sf::Texture &texRun, sf::Texture &texIdle,sf::Texture& texAttack,Map& gamemap);
+    Player(sf::Texture &texRun, sf::Texture &texIdle, sf::Texture &texAttack, Map &gamemap);
 
     //using Entity virtual fuction to update player evry frame
     //override ?? still question,ans-> protect from creating its own new function instead of the parent virtual function
     void update(float dt) override;
-    float getDepth()const override {
+
+    float getDepth() const override {
         return wsprite.getPosition().y;
+    }
+
+    void healthbarDraw(sf::RenderWindow &window) {
+        window.draw(healthBar);
     }
 };
 

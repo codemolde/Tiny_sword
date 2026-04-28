@@ -3,31 +3,36 @@
 //
 #include "Enemy.h"
 
-Enemy::Enemy(sf::Texture &texRunen, sf::Texture &texIdleen, sf::Texture &texAttacken, Map &gamemap): Entity(texRunen),texRunen(texRunen),texIdleen(texIdleen),texAttacken(texAttacken), aniEnemy(192, 192, 6, 0.09f),aniEnemyIdle(192, 192, 6, 0.09f),aniEnemyAttack(192, 192, 4, 0.09f),map(gamemap){
+Enemy::Enemy(sf::Texture &texRunen, sf::Texture &texIdleen, sf::Texture &texAttacken, Map &gamemap): Entity(texRunen),
+    texRunen(texRunen), texIdleen(texIdleen), texAttacken(texAttacken), aniEnemy(192, 192, 6, 0.09f),
+    aniEnemyIdle(192, 192, 6, 0.09f), aniEnemyAttack(192, 192, 4, 0.09f), map(gamemap) {
     wsprite.setTextureRect(aniEnemy.getFrameRect());
     wsprite.setPosition(sf::Vector2f(400, 400));
     wsprite.setScale(sf::Vector2f(1, 1));
     wsprite.setOrigin({96, 96});
+    healthBaren.setSize({100, 1});
+    healthBaren.setScale({0.5, 4});
+    healthBaren.setFillColor(sf::Color::Cyan);
+    healthBaren.setPosition(wsprite.getPosition());
+    healthBaren.setOrigin({64, 16});
 }
 
 void Enemy::update(float dt) {
-
-    mvelocity=plyposition-wsprite.getPosition();
+    mvelocity = plyposition - wsprite.getPosition();
 
     float length = std::sqrt(mvelocity.x * mvelocity.x + mvelocity.y * mvelocity.y);
     mvelocity.x /= length;
     mvelocity.y /= length;
-    float distanceRadius=3*64;
+    float distanceRadius = 3 * 64;
 
-    if (length<=distanceRadius && distanceRadius> 96) {
-
+    if (length <= distanceRadius && distanceRadius > 96) {
         float speed = 150.f;
-        mvelocity.x *= speed*dt;
-        mvelocity.y *= speed*dt;
+        mvelocity.x *= speed * dt;
+        mvelocity.y *= speed * dt;
 
         sf::Vector2f pos = wsprite.getPosition();
 
-        sf::Vector2f rpos = map.getGridPos(pos,mvelocity);
+        sf::Vector2f rpos = map.getGridPos(pos, mvelocity);
 
         if (mvelocity.x > 0) {
             wsprite.setScale({1, 1});
@@ -36,12 +41,19 @@ void Enemy::update(float dt) {
         }
 
         wsprite.setPosition(rpos);
+        healthBaren.setPosition(wsprite.getPosition());
+        sf::FloatRect bounds = wsprite.getGlobalBounds();
+
+        idleRecten = sf::IntRect(
+            { static_cast<int>(bounds.position.x), static_cast<int>(bounds.position.y) },
+            { static_cast<int>(bounds.size.x), static_cast<int>(bounds.size.y) }
+        );
     }
 
 
     // checks if moving or not
     bool running = true;
-    if (length>distanceRadius || length<=16) {
+    if (length > distanceRadius || length <= 16) {
         running = false;
     } else {
         running = true;
@@ -52,14 +64,15 @@ void Enemy::update(float dt) {
         wsprite.setTexture(texAttacken);
         aniEnemyAttack.update(dt, 0);
         wsprite.setTextureRect(aniEnemyAttack.getFrameRect());
-        healthen-=0.01;
-    }
-    else if (!running) {
+        healthen -= 0.009;
+        if (healthen >= 0) {
+            healthBaren.setSize({healthen, 1});
+        }
+    } else if (!running) {
         wsprite.setTexture(texIdleen);
         aniEnemyIdle.update(dt, 0);
         wsprite.setTextureRect(aniEnemyIdle.getFrameRect());
-    }
-    else {
+    } else {
         wsprite.setTexture(texRunen);
         aniEnemy.update(dt, 0);
         wsprite.setTextureRect(aniEnemy.getFrameRect());
@@ -67,10 +80,10 @@ void Enemy::update(float dt) {
 }
 
 bool Enemy::attack() {
-    mvelocity=plyposition-wsprite.getPosition();
+    mvelocity = plyposition - wsprite.getPosition();
 
     float length = std::sqrt(mvelocity.x * mvelocity.x + mvelocity.y * mvelocity.y);
-    if (length<=32) {
+    if (length <= 32) {
         return true;
     }
     return false;
