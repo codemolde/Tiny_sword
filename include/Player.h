@@ -41,6 +41,8 @@ public:
     void healthbarDraw(sf::RenderWindow &window) {
         window.draw(healthBar);
     }
+
+    bool attack();
 };
 
 #endif //PLAYER_H

@@ -79,9 +79,26 @@ void Game::render() {
 }
 
 void Game::update(float dt) {
-    player->update(dt);
-    enemy->getPlayerpos(player->wsprite.getPosition());
-    enemy->update(dt);
+    if (player->healthpy > 0) {
+        player->update(dt);
+        enemy->getPlayerpos(player->wsprite.getPosition());
+    }
+    else {
+        enemy->getPlayerpos({-9999, -9999});
+    }
+    if (enemy->healthen > 0) {
+        enemy->update(dt);
+    }
+    if (player->healthpy > 0 && enemy->healthen > 0) {
+        if (enemy->idleRecten.findIntersection(player->idleRectpy)) {
+            if (enemy->attack()) {
+                player->healthpy -= 0.009;
+            }
+            if (player->attack()) {
+                enemy->healthen -= 0.02;
+            }
+        }
+    }
     map->updatemap(dt);
     tr->update(dt);
 }

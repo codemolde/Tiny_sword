@@ -64,7 +64,6 @@ void Enemy::update(float dt) {
         wsprite.setTexture(texAttacken);
         aniEnemyAttack.update(dt, 0);
         wsprite.setTextureRect(aniEnemyAttack.getFrameRect());
-        healthen -= 0.009;
         if (healthen >= 0) {
             healthBaren.setSize({healthen, 1});
         }

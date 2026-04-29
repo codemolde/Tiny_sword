@@ -71,15 +71,10 @@ void Player::update(float dt) {
         running = true;
     }
 
-
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) {
         wsprite.setTexture(texAttack);
         animatorAttack.update(dt, 0);
         wsprite.setTextureRect(animatorAttack.getFrameRect());
-        healthpy -= 0.009;
-        if (healthpy >= 0) {
-            healthBar.setSize({healthpy, 1});
-        }
     } else if (!running) {
         wsprite.setTexture(texIdle);
         animatorIdle.update(dt, 0);
@@ -89,4 +84,14 @@ void Player::update(float dt) {
         animator.update(dt, 0);
         wsprite.setTextureRect(animator.getFrameRect());
     }
+    if (healthpy >= 0) {
+        healthBar.setSize({healthpy, 1});
+    }
+}
+
+bool Player::attack() {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R)) {
+        return true;
+    }
+    return false;
 }
