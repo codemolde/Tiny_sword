@@ -14,6 +14,8 @@ private:
     sf::Texture &texAttacken;
     Map &map;
     sf::Vector2f plyposition;
+    sf::Time attackcooldown=sf::seconds(3);
+    sf::Time currentcooldown=sf::Time::Zero;
 
 public:
     sf::RectangleShape healthBaren;
@@ -45,6 +47,8 @@ public:
     }
 
     bool attack();
+
+
 };
 
 #endif //ENEMY_H

@@ -8,7 +8,8 @@ Player::Player(sf::Texture &texRun, sf::Texture &texIdle, sf::Texture &texAttack
     texRun(texRun), texIdle(texIdle), texAttack(texAttack), animator(192, 192, 6, 0.09f),
     animatorIdle(192, 192, 6, 0.09f), animatorAttack(192, 192, 4, 0.09f), map(gamemap) {
     wsprite.setTextureRect(animator.getFrameRect());
-    wsprite.setPosition(sf::Vector2f(200, 200));
+    basepos=sf::Vector2f(200,200);
+    wsprite.setPosition(basepos);
     wsprite.setScale(sf::Vector2f(1, 1));
     wsprite.setOrigin({96, 96});
     healthBar.setSize({100, 1});
@@ -20,6 +21,34 @@ Player::Player(sf::Texture &texRun, sf::Texture &texIdle, sf::Texture &texAttack
 
 void Player::update(float dt) {
     mvelocity = {0, 0};
+
+    if (healthpy >= 0) {
+        healthBar.setSize({healthpy, 1});
+    }
+    if (isTakingDamage) {
+        damageTimer-=sf::seconds(dt);
+
+        if (damageTimer<=sf::Time::Zero) {
+            isTakingDamage = false;
+            wsprite.setColor(sf::Color::White);
+            wsprite.setPosition(basepos);
+            wsprite.setRotation(sf::degrees(0.f));
+        }
+        else {
+            wsprite.setColor(sf::Color(255,50,50,180));
+
+            float wobblespeed=50;
+            float wobbleintensity=2;
+
+            float timer = damageTimer.asSeconds();
+
+            float offetX=std::sin(timer*wobblespeed)*wobbleintensity;
+            float offetY=std::cos(timer*wobblespeed+1.2)*wobbleintensity;
+
+            wsprite.setPosition(basepos+sf::Vector2f(offetX,offetY));
+            healthBar.setPosition(basepos+sf::Vector2f(offetX,offetY));
+        }
+    }else {
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W)) {
         mvelocity.y -= 1.f;
@@ -48,11 +77,9 @@ void Player::update(float dt) {
         mvelocity.x *= speed * dt;
         mvelocity.y *= speed * dt;
 
-        sf::Vector2f pos = wsprite.getPosition();
+        basepos= map.getGridPos(basepos, mvelocity);
 
-        sf::Vector2f rpos = map.getGridPos(pos, mvelocity);
-
-        wsprite.setPosition(rpos);
+        wsprite.setPosition(basepos);
         healthBar.setPosition(wsprite.getPosition());
         sf::FloatRect bounds = wsprite.getGlobalBounds();
 
@@ -84,9 +111,9 @@ void Player::update(float dt) {
         animator.update(dt, 0);
         wsprite.setTextureRect(animator.getFrameRect());
     }
-    if (healthpy >= 0) {
-        healthBar.setSize({healthpy, 1});
     }
+
+
 }
 
 bool Player::attack() {

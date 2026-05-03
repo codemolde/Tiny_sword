@@ -92,7 +92,8 @@ void Game::update(float dt) {
     if (player->healthpy > 0 && enemy->healthen > 0) {
         if (enemy->idleRecten.findIntersection(player->idleRectpy)) {
             if (enemy->attack()) {
-                player->healthpy -= 0.009;
+                player->healthpy -= 10;
+                player->takeDamage();
             }
             if (player->attack()) {
                 enemy->healthen -= 0.02;

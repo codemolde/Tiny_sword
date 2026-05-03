@@ -16,6 +16,10 @@ private:
     sf::Texture &texIdle;
     sf::Texture &texAttack;
     Map &map;
+    bool isTakingDamage;
+    sf::Time damageDuration = sf::seconds(0.4f);
+    sf::Time damageTimer = sf::Time::Zero;
+    sf::Vector2f basepos;
 
 public:
     sf::RectangleShape healthBar;
@@ -43,6 +47,13 @@ public:
     }
 
     bool attack();
+
+    void takeDamage() {
+        isTakingDamage=true;
+        damageTimer=damageDuration;
+    };
+
+
 };
 
 #endif //PLAYER_H

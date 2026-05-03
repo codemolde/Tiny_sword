@@ -45,8 +45,8 @@ void Enemy::update(float dt) {
         sf::FloatRect bounds = wsprite.getGlobalBounds();
 
         idleRecten = sf::IntRect(
-            { static_cast<int>(bounds.position.x), static_cast<int>(bounds.position.y) },
-            { static_cast<int>(bounds.size.x), static_cast<int>(bounds.size.y) }
+            {static_cast<int>(bounds.position.x), static_cast<int>(bounds.position.y)},
+            {static_cast<int>(bounds.size.x), static_cast<int>(bounds.size.y)}
         );
     }
 
@@ -59,8 +59,14 @@ void Enemy::update(float dt) {
         running = true;
     }
 
+    if (currentcooldown > sf::Time::Zero) {
+        currentcooldown -= sf::seconds(dt);
+    }
 
-    if (attack()) {
+    float animdura=3*0.09;
+    bool isattacking = currentcooldown.asSeconds() > attackcooldown.asSeconds()-animdura;
+
+    if (isattacking) {
         wsprite.setTexture(texAttacken);
         aniEnemyAttack.update(dt, 0);
         wsprite.setTextureRect(aniEnemyAttack.getFrameRect());
@@ -81,9 +87,12 @@ void Enemy::update(float dt) {
 bool Enemy::attack() {
     mvelocity = plyposition - wsprite.getPosition();
 
-    float length = std::sqrt(mvelocity.x * mvelocity.x + mvelocity.y * mvelocity.y);
-    if (length <= 32) {
-        return true;
+    if (currentcooldown <= sf::Time::Zero) {
+        float length = std::sqrt(mvelocity.x * mvelocity.x + mvelocity.y * mvelocity.y);
+        if (length <= 32) {
+        currentcooldown=attackcooldown;
+            return true;
+        }
     }
     return false;
 }
